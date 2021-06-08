@@ -139,5 +139,5 @@ cython_debug/
 
 
 
-#Migrations
-course/migrations/
+# Migrations
+*/migrations/*
