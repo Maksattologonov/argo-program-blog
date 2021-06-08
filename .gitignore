@@ -140,4 +140,12 @@ cython_debug/
 
 
 # Migrations
+*kapvenv
+*.idea
+*my_settings.py
+*__pycache__
+*media
 */migrations/*
+pycache/
+*/pycache/
+*.py[cod] 
