@@ -3,10 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-migrations/
-*.py[cod]
-*$py.class
-
 # C extensions
 *.so
 
@@ -149,9 +145,6 @@ cython_debug/
 !.vscode/extensions.json 
 .history
 
-# Migrations
-**/migrations/**
-**/**/migrations/
-!**/migrations
-!**/migrations/
-!**/migrations/__init__.py
+
+# migrations
+**/migrations/*
