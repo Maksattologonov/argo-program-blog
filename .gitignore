@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+migrations/
+*.py[cod]
+*$py.class
+
 # C extensions
 *.so
 
@@ -137,11 +141,16 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-
+# Visual Studio Code # 
+.vscode/* 
+!.vscode/settings.json 
+!.vscode/tasks.json 
+!.vscode/launch.json 
+!.vscode/extensions.json 
+.history
 
 # Migrations
 **/migrations/**
-**/**/migrations
 **/**/migrations/
 !**/migrations
 !**/migrations/
