@@ -140,4 +140,4 @@ cython_debug/
 
 
 #Migrations
-course/migrations
+course/migrations/
