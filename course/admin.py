@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (Company, Contact, SocialMedia,
                      Category, Teacher, CourseImage,
                      Course, CourseTopic, TopicLesson,
-                     Star, Rating)
+                     Star)
 
 
 @admin.register(Company)
@@ -27,12 +27,12 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'specialty')
+    list_display = ('first_name', 'last_name', 'specialty', 'course')
 
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'price', 'teacher')
+    list_display = ('id', 'title', 'description', 'price', 'category')
 
 
 @admin.register(CourseImage)
@@ -42,19 +42,19 @@ class CourseImageAdmin(admin.ModelAdmin):
 
 @admin.register(CourseTopic)
 class CourseTopicAdmin(admin.ModelAdmin):
-    list_display = ('title', 'course')
+    list_display = ('title', 'course', 'serial_number')
 
 
 @admin.register(TopicLesson)
 class TopicLessonAdmin(admin.ModelAdmin):
-    list_display = ('title', 'topic')
-
-
-@admin.register(Rating)
-class RatingAdmin(admin.ModelAdmin):
-    list_display = ('star', 'course')
+    list_display = ('title', 'topic', 'serial_number')
 
 
 @admin.register(Star)
 class StarAdmin(admin.ModelAdmin):
     list_display = ('value',)
+
+
+# @admin.register(Rating)
+# class RatingAdmin(admin.ModelAdmin):
+#     list_display = ('star', 'course')
