@@ -1,6 +1,6 @@
 from django.db import models
-# from django.contrib.postgres.functions import RandomUUID
 import uuid
+from django.contrib.auth.models import User
 
 class Company(models.Model):
     title = models.CharField(max_length=255, verbose_name='Наименование')
@@ -9,6 +9,9 @@ class Company(models.Model):
     class Meta:
         verbose_name = 'Компания'
         verbose_name_plural = 'О компании'
+    
+    def __str__(self):
+        return self.title
 
 
 class Contact(models.Model):
@@ -29,11 +32,14 @@ class SocialMedia(models.Model):
     url = models.URLField(verbose_name='Ссылка')
     company = models.ForeignKey(Company, on_delete=models.CASCADE,
                                 verbose_name='Компания',
-                                related_name='social_medias')
+                                related_name='medias')
 
     class Meta:
         verbose_name = 'Социальная сеть'
         verbose_name_plural = 'Социальные сети'
+    
+    def __str__(self):
+        return self.media_name
 
 
 class Category(models.Model):
@@ -74,13 +80,22 @@ class Teacher(models.Model):
     specialty = models.CharField(max_length=255, verbose_name='Специальность')
     image = models.ImageField(upload_to='teacher', blank=True,
                               null=True, verbose_name='Изображение')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE,
-                                related_name='teachers',
-                                verbose_name='Преподаватель')
 
     class Meta:
         verbose_name = 'Преподаватель'
         verbose_name_plural = 'Преподаватели'
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
+
+class CourseTeacher(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,
+                               related_name='teachers',
+                               verbose_name='Курс')
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE,
+                               related_name='courses',
+                               verbose_name='Преподаватель')
 
 
 class CourseImage(models.Model):
@@ -101,9 +116,13 @@ class CourseTopic(models.Model):
                                related_name='topics', verbose_name='Курс')
 
     class Meta:
-        verbose_name = 'Тема лекции'
-        verbose_name_plural = 'Темы лекций'
+        verbose_name = 'Лекция'
+        verbose_name_plural = 'Лекции'
         ordering = ('serial_number',)
+
+    def __str__(self):
+        return self.title
+    
 
 
 class TopicLesson(models.Model):
@@ -111,11 +130,15 @@ class TopicLesson(models.Model):
     serial_number = models.IntegerField(verbose_name='Порядковый номер', null=True)
     topic = models.ForeignKey(CourseTopic, on_delete=models.CASCADE,
                               related_name='lessons',
-                              verbose_name='Тема лекции')
-
+                              verbose_name='Лекция')
+    
     class Meta:
-        verbose_name = 'Лекция'
-        verbose_name_plural = 'Лекции'
+        verbose_name = 'Урок'
+        verbose_name_plural = 'Уроки'
+        ordering = ('serial_number',)
+    
+    def __str__(self):
+        return self.title
 
 
 class Star(models.Model):
@@ -125,13 +148,25 @@ class Star(models.Model):
         verbose_name = 'Звезда'
         verbose_name_plural = 'Звезды'
 
+    def __str__(self):
+        return f'{self.value}'
 
-# class Rating(models.Model):
-#     course = models.ForeignKey(Course, on_delete=models.CASCADE,
-#                                related_name='rating', verbose_name='Курс')
-#     star = models.ForeignKey(Star, verbose_name='Звезда',
-#                              on_delete=models.CASCADE)
 
-#     class Meta:
-#         verbose_name = 'Оценка'
-#         verbose_name_plural = 'Оценки'
+class Rating(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,
+                               related_name='rating', verbose_name='Курс')
+    star = models.ForeignKey(Star, verbose_name='Звезда',
+                             on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name='Пользователь',
+                             related_name='rating',
+                             on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Оценка'
+        verbose_name_plural = 'Оценки'
+
+    
+    def __str__(self):
+        return f'{self.star}'
+    
+    
