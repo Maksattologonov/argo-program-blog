@@ -21,7 +21,7 @@ settingss
 
 # C extensions
 *.so
-
+media/
 # Distribution / packaging
 .Python
 build/

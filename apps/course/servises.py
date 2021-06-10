@@ -1,12 +1,12 @@
-
 from django.db import models
 
+
 class CoursesMixin:
-    serializer1 = None
+    serializer = None
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['courses'] = self.serializer1(instance.courses.all(), many=True).data
+        representation['courses'] = self.serializer(instance.courses.all(), many=True).data
         return representation
 
 
@@ -28,6 +28,7 @@ class LessonsMixin:
         representation = super().to_representation(instance)
         representation['lessons'] = self.serializer(instance.lessons.all(), many=True).data
         return representation
+
 
 class ContactsMediasMixin:
     serializer1 = None
