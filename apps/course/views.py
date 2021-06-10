@@ -5,9 +5,9 @@ from drf_multiple_model.views import ObjectMultipleModelAPIView
 from rest_framework.response import Response
 from .serializers import (CategorySerializer, CommentSerializer, CourseSerializer,
                           CompanySerializer, CategoryListSerializer,
-                          RatingSerializer)
-from .models import Category, Comment, Course, Company, Rating
-from .servises import RatingCreateMixin
+                          RatingSerializer, FavoriteSerializer)
+from .models import Category, Comment, Course, Company, Favorite, Rating
+from .servises import CreateMixin
 
 
 
@@ -55,12 +55,13 @@ class CategoryCourses(generics.RetrieveAPIView):
     serializer_class = CategorySerializer
 
 
-class RatingCreate(RatingCreateMixin, generics.CreateAPIView):
+class RatingCreate(CreateMixin, generics.CreateAPIView):
     '''
     Api for create rating.
     Have a mixin thet cheking if rating for course from user exists
     '''
     serializer_class = RatingSerializer
+    model = Rating
 
 
 class CommentCreate(generics.CreateAPIView):
@@ -79,3 +80,8 @@ class CommentDelete(generics.DestroyAPIView):
     '''Api for delete comment'''
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+
+class AddFavorite(CreateMixin, generics.CreateAPIView):
+    serializer_class = FavoriteSerializer
+    model = Favorite

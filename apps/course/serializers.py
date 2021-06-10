@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 from .models import (Course, Category, CourseTopic, Rating,
                      TopicLesson, Company, Contact, SocialMedia,
@@ -59,6 +60,12 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = ('id', 'star', 'course', 'user')
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Favorite
+        fields = ('id', 'course', 'user')
 
 
 # Serializers with reprezentations

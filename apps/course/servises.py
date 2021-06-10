@@ -1,6 +1,4 @@
 from django.db import models
-
-from .models import Rating
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -60,12 +58,13 @@ class ContactsMediasMixin:
 
 
 # Views mixins
-class RatingCreateMixin:
+class CreateMixin:
     serializer_class = None
+    model = None
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if Rating.objects.filter(user=request.data['user'], course=request.data['course']):
+        if self.model.objects.filter(user=request.data['user'], course=request.data['course']):
             return Response('cannot evaluete again')
         else:
             serializer.is_valid(raise_exception=True)
