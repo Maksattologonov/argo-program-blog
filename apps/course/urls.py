@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (CategoriesWithCourses, CourseDetails,
                     CompanyDetails, AllCourses,
                     CategoryCourses, RatingCreate,
-                    CommentCreate, CommentUpdate, CommentDelete)
+                    CommentCreate, CommentUpdate, CommentDelete,
+                    AddFavorite)
 
 urlpatterns = [
     path('', CategoriesWithCourses.as_view(), name='categories'),
@@ -15,5 +16,5 @@ urlpatterns = [
     path('course/<str:pk>/comment_create/', CommentCreate.as_view(), name='comment_create'),
     path('course/<str:course_pk>/comment_update/<int:pk>/', CommentUpdate.as_view(), name='comment_update'),
     path('course/<str:course_pk>/comment_delete/<int:pk>/', CommentDelete.as_view(), name='comment_delete'),
-
+    path('course/<str:pk>/favorite_add/', AddFavorite.as_view(), name='add_favorite')
 ]
