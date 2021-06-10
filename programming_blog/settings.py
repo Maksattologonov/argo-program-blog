@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'authemail',
     'course',
+    'drf_multiple_model',
 ]
 
 
