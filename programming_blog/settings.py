@@ -29,6 +29,12 @@ INSTALLED_APPS = [
     'apps.course',
     'rest_framework',
     'corsheaders',
+    'accounts',
+    'rest_framework.authtoken',
+    'authemail',
+    'course',
+    'drf_multiple_model',
+  
 ]
 
 MIDDLEWARE = [
