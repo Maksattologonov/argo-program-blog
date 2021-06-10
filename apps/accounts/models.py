@@ -1,4 +1,3 @@
-
 from django.db import models
 from authemail.models import EmailUserManager, EmailAbstractUser
 
@@ -9,6 +8,3 @@ class MyUser(EmailAbstractUser):
 
     # Required
     objects = EmailUserManager()
-
-    class Meta:
-        db_table = 'usr'

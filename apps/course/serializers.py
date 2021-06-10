@@ -95,6 +95,7 @@ class CourseSerializer(TopicsAndRatingMixin, serializers.ModelSerializer):
                   'middle_star', 'category')
 
 
+
 class CompanySerializer(ContactsMediasMixin, serializers.ModelSerializer):
     """Lesson details"""
     serializer1 = ContactSerializer

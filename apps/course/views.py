@@ -19,7 +19,6 @@ class CompanyDetails(APIView):
         return Response({'company': serializer.data})
 
 
-
 class CategoriesWithCourses(generics.ListAPIView):
     '''Api for home page where only 4 courses for every category'''
     queryset = Category.objects.all()

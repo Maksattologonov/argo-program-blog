@@ -1,4 +1,5 @@
 from django.db import models
+
 from .models import Rating
 from rest_framework import status
 from rest_framework.response import Response

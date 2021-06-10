@@ -1,6 +1,6 @@
 from django.db import models
 import uuid
-from accounts.models import MyUser as User
+from apps.accounts.models import MyUser as User
 
 
 class Company(models.Model):
@@ -197,3 +197,4 @@ class Favorite(models.Model):
     class Meta:
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные'
+
