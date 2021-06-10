@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
-from django.contrib.auth.models import User
+from apps.accounts.models import MyUser as User
+
 
 class Company(models.Model):
     title = models.CharField(max_length=255, verbose_name='Наименование')
@@ -9,7 +10,7 @@ class Company(models.Model):
     class Meta:
         verbose_name = 'Компания'
         verbose_name_plural = 'О компании'
-    
+
     def __str__(self):
         return self.title
 
@@ -37,7 +38,7 @@ class SocialMedia(models.Model):
     class Meta:
         verbose_name = 'Социальная сеть'
         verbose_name_plural = 'Социальные сети'
-    
+
     def __str__(self):
         return self.media_name
 
@@ -55,18 +56,17 @@ class Category(models.Model):
 
 class Course(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
-                            editable=False)
+                          editable=False)
     title = models.CharField(max_length=255, verbose_name='Наименование')
     description = models.TextField(verbose_name='Описание')
     price = models.DecimalField(max_digits=5, decimal_places=2,
                                 verbose_name='Цена')
     category = models.ForeignKey(Category, on_delete=models.CASCADE,
-                                verbose_name='Категория',
-                                related_name='courses')
+                                 verbose_name='Категория',
+                                 related_name='courses')
 
     def __str__(self):
         return self.title
-    
 
     class Meta:
         verbose_name = 'Курс'
@@ -94,8 +94,8 @@ class CourseTeacher(models.Model):
                                related_name='teachers',
                                verbose_name='Курс')
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE,
-                               related_name='courses',
-                               verbose_name='Преподаватель')
+                                related_name='courses',
+                                verbose_name='Преподаватель')
 
 
 class CourseImage(models.Model):
@@ -122,7 +122,6 @@ class CourseTopic(models.Model):
 
     def __str__(self):
         return self.title
-    
 
 
 class TopicLesson(models.Model):
@@ -131,12 +130,12 @@ class TopicLesson(models.Model):
     topic = models.ForeignKey(CourseTopic, on_delete=models.CASCADE,
                               related_name='lessons',
                               verbose_name='Лекция')
-    
+
     class Meta:
         verbose_name = 'Урок'
         verbose_name_plural = 'Уроки'
         ordering = ('serial_number',)
-    
+
     def __str__(self):
         return self.title
 
@@ -165,8 +164,5 @@ class Rating(models.Model):
         verbose_name = 'Оценка'
         verbose_name_plural = 'Оценки'
 
-    
     def __str__(self):
         return f'{self.star}'
-    
-    
