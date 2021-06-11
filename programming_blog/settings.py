@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from pathlib import Path
 from decouple import config
 
@@ -10,11 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
-
+database_from_env = dj_database_url.config()
+DATABASES['default'].update(database_from_env)
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS')
 # Application definition
 
 INSTALLED_APPS = [
