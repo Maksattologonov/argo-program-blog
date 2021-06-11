@@ -6,11 +6,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .serializers import (CategorySerializer, CommentSerializer,
                           CourseSerializer, CompanySerializer,
-                          CategoryListSerializer, RatingSerializer,
+                          CategoryListSerializer, CoursesSerializer, RatingSerializer,
                           FavoriteSerializer)
 from .models import Category, Comment, Course, Company, Favorite, Rating
 from .servises import CreateMixin
 from .permissinos import IsOwner
+from .pagination import CoursePagination
 
 
 class CompanyDetails(APIView):
@@ -37,7 +38,7 @@ class CourseDetails(APIView):
         serializer = CourseSerializer(course[0], many=False)
         is_favorite = Favorite.objects.filter(
             course=kwargs.get('pk'),
-            user=1
+            user=request.user #TODO: CHANGE ON REQUEST USER
         ).exists()
         return Response(data={
             'data': serializer.data,
@@ -51,14 +52,19 @@ class AllCourses(ObjectMultipleModelAPIView):
         {'queryset': Category.objects.all(),
          'serializer_class': CategoryListSerializer},
         {'queryset': Course.objects.all(),
-         'serializer_class': CourseSerializer},
+         'serializer_class': CoursesSerializer,},
     ]
+    
 
 
-class CategoryCourses(generics.RetrieveAPIView):
+class CategoryCourses(generics.ListAPIView):
     '''Api for one category with its courses'''
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    serializer_class = CoursesSerializer
+    pagination_class = CoursePagination
+
+    def get_queryset(self):
+        courses = Course.objects.filter(category=self.kwargs['pk'])
+        return courses
 
 
 class RatingCreate(CreateMixin, generics.CreateAPIView):
@@ -68,13 +74,13 @@ class RatingCreate(CreateMixin, generics.CreateAPIView):
     '''
     serializer_class = RatingSerializer
     model = Rating
-    permission_classes = IsAuthenticated
+    permission_classes = (IsAuthenticated,)
 
 
 class CommentCreate(generics.CreateAPIView):
     '''Api for create comment'''
     serializer_class = CommentSerializer
-    permission_classes = IsAuthenticated
+    permission_classes = (IsAuthenticated,)
 
 
 class CommentUpdate(generics.UpdateAPIView):
@@ -89,22 +95,22 @@ class CommentDelete(generics.DestroyAPIView):
     '''Api for delete comment'''
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = IsOwner
+    permission_classes = (IsOwner,)
 
 
 class FavoriteAdd(generics.CreateAPIView):
     serializer_class = FavoriteSerializer
     model = Favorite
-    permission_classes = IsAuthenticated
+    permission_classes = (IsAuthenticated,)
 
 
 class FavoriteDelete(generics.DestroyAPIView):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
-    permission_classes = IsOwner
+    permission_classes = (IsOwner,)
 
 
 class FavoritesList(generics.ListAPIView):
-    queryset = Favorite.objects.filter(user=1)
+    queryset = Favorite.objects.filter(user=1) #TODO: CHANGE ON REQUEST USER
     serializer_class = FavoriteSerializer
-    permission_classes = IsAuthenticated
+    permission_classes = (IsAuthenticated,)
