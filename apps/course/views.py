@@ -3,12 +3,14 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 from rest_framework.response import Response
-from .serializers import (CategorySerializer, CommentSerializer, CourseSerializer,
-                          CompanySerializer, CategoryListSerializer,
-                          RatingSerializer, FavoriteSerializer)
+from rest_framework.permissions import IsAuthenticated
+from .serializers import (CategorySerializer, CommentSerializer,
+                          CourseSerializer, CompanySerializer,
+                          CategoryListSerializer, RatingSerializer,
+                          FavoriteSerializer)
 from .models import Category, Comment, Course, Company, Favorite, Rating
 from .servises import CreateMixin
-
+from .permissinos import IsOwner
 
 
 class CompanyDetails(APIView):
@@ -28,14 +30,18 @@ class CategoriesWithCourses(generics.ListAPIView):
 class CourseDetails(APIView):
     '''Api for all details for course with lessons, ratings and comments'''
     def get(self, request, *args, **kwargs):
-        course = Course.objects.filter(
-            id=kwargs.get('pk')
-        ).annotate(middle_star=models.Sum(
+        course = Course.objects.filter(id=kwargs.get('pk'))
+        course = course.annotate(middle_star=models.Sum(
             'rating__star'
         )/models.Count('rating'))
         serializer = CourseSerializer(course[0], many=False)
+        is_favorite = Favorite.objects.filter(
+            course=kwargs.get('pk'),
+            user=1
+        ).exists()
         return Response(data={
-            'data': serializer.data
+            'data': serializer.data,
+            'is_favorite': is_favorite
         })
 
 
@@ -62,26 +68,43 @@ class RatingCreate(CreateMixin, generics.CreateAPIView):
     '''
     serializer_class = RatingSerializer
     model = Rating
+    permission_classes = IsAuthenticated
 
 
 class CommentCreate(generics.CreateAPIView):
     '''Api for create comment'''
     serializer_class = CommentSerializer
+    permission_classes = IsAuthenticated
 
 
 class CommentUpdate(generics.UpdateAPIView):
     '''Api for update comment'''
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    http_method_names = ['patch',]
+    permission_classes = IsOwner
+    http_method_names = ('patch',)
 
 
 class CommentDelete(generics.DestroyAPIView):
     '''Api for delete comment'''
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = IsOwner
 
 
-class AddFavorite(CreateMixin, generics.CreateAPIView):
+class FavoriteAdd(generics.CreateAPIView):
     serializer_class = FavoriteSerializer
     model = Favorite
+    permission_classes = IsAuthenticated
+
+
+class FavoriteDelete(generics.DestroyAPIView):
+    queryset = Favorite.objects.all()
+    serializer_class = FavoriteSerializer
+    permission_classes = IsOwner
+
+
+class FavoritesList(generics.ListAPIView):
+    queryset = Favorite.objects.filter(user=1)
+    serializer_class = FavoriteSerializer
+    permission_classes = IsAuthenticated
