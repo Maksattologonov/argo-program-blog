@@ -1,4 +1,3 @@
-from django.db.models import fields
 from rest_framework import serializers
 from .models import (Course, Category, CourseTopic, Rating,
                      TopicLesson, Company, Contact, SocialMedia,
@@ -13,7 +12,8 @@ class CoursesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('id', 'title', 'description', 'middle_star', 'price', 'category')
+        fields = ('id', 'title', 'description', 'middle_star',
+                  'price', 'category')
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
@@ -95,12 +95,12 @@ class CourseSerializer(TopicsAndRatingMixin, serializers.ModelSerializer):
 
     category = serializers.SlugRelatedField(slug_field='title', read_only=True)
     middle_star = serializers.FloatField(read_only=True)
+    favorite_passed = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Course
         fields = ('id', 'title', 'description', 'price',
-                  'middle_star', 'category')
-
+                  'middle_star', 'favorite_passed', 'category')
 
 
 class CompanySerializer(ContactsMediasMixin, serializers.ModelSerializer):
@@ -111,4 +111,3 @@ class CompanySerializer(ContactsMediasMixin, serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = ('id', 'title', 'description')
-

@@ -150,7 +150,8 @@ class Rating(models.Model):
         (4, 4),
         (5, 5)
     )
-    created_at = models.DateTimeField(auto_now=True, verbose_name='Время создания')
+    created_at = models.DateTimeField(auto_now=True,
+                                      verbose_name='Время создания')
     course = models.ForeignKey(Course, on_delete=models.CASCADE,
                                related_name='rating', verbose_name='Курс')
     star = models.IntegerField(choices=RATING_RANGE,)
@@ -169,7 +170,8 @@ class Rating(models.Model):
 
 class Comment(models.Model):
     message = models.TextField()
-    created_at = models.DateTimeField(auto_now=True, verbose_name='Время создания')
+    created_at = models.DateTimeField(auto_now=True,
+                                      verbose_name='Время создания')
     course = models.ForeignKey(Course, on_delete=models.CASCADE,
                                related_name='comments',
                                verbose_name='Курс')
@@ -197,4 +199,3 @@ class Favorite(models.Model):
     class Meta:
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные'
-
