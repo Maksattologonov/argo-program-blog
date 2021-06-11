@@ -32,18 +32,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'authemail',
     'djoser',
-
     'rest_framework.authtoken',
-
     'apps.accounts',
     'apps.course',
     'rest_framework',
     'corsheaders',
-    'rest_framework.authtoken',
-    'authemail',
 ]
 
 
@@ -143,7 +138,7 @@ EMAIL_PORT = 587
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'ACTIVATION_URL': '/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {},
 }
