@@ -1,6 +1,6 @@
 from django.db import models
 import uuid
-from apps.accounts.models import MyUser as User
+from ..accounts.models import User
 
 
 class Company(models.Model):

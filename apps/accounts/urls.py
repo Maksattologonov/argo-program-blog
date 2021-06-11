@@ -1,10 +1,10 @@
-from django.urls import path, include
-from rest_framework.authtoken import views
-
+from django.urls import path
+from .views import (
+    RegisterView, LoginView, UserView, LogoutView, )
 
 urlpatterns = [
-    path('api-auth/', include('rest_framework.urls')),
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.authtoken')),
-    path('auth/', include('djoser.urls.jwt')),
+    path('register/', RegisterView.as_view()),
+    path('login/', LoginView.as_view()),
+    path('user/', UserView.as_view()),
+    path('logout/', LogoutView.as_view()),
 ]
