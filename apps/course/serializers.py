@@ -48,6 +48,14 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'message', 'course', 'user')
 
 
+class CommentCreateSerializer(serializers.ModelSerializer):
+    """Media details"""
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'message', 'course')
+
+
 class LessonSerializer(serializers.ModelSerializer):
     """Lesson details"""
 
