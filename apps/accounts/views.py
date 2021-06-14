@@ -1,5 +1,5 @@
 from knox.models import AuthToken
-from rest_framework import viewsets, permissions, generics
+from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
 from .serializers import CreateUserSerializer, UserSerializer, LoginUserSerializer
@@ -7,6 +7,7 @@ from .serializers import CreateUserSerializer, UserSerializer, LoginUserSerializ
 
 class RegistrationAPI(generics.GenericAPIView):
     serializer_class = CreateUserSerializer
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -20,6 +21,7 @@ class RegistrationAPI(generics.GenericAPIView):
 
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginUserSerializer
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

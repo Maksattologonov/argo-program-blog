@@ -12,8 +12,9 @@ class CreateUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            validated_data['username'])
+        user = User(username=validated_data['username'])
+        user.set_password(validated_data['password'])
+        user.save()
         return user
 
 
@@ -28,7 +29,8 @@ class LoginUserSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def validate(self, data):
-        user = authenticate(**data)
+        user = authenticate(username=data.get('username'), password=data.get('password'))
+        print(user)
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Invalid Details.")
