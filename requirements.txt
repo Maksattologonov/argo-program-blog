@@ -1,5 +1,6 @@
 appdirs==1.4.4
 asgiref==3.2.10
+base==1.0.4
 certifi==2021.5.30
 cffi==1.14.5
 chardet==4.0.0
