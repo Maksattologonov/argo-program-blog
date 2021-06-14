@@ -9,10 +9,12 @@ from .servises import (CoursesMixin, LessonsMixin,
 class CoursesSerializer(serializers.ModelSerializer):
     """Courses list"""
     middle_star = serializers.FloatField(read_only=True)
+    category = serializers.SlugRelatedField(slug_field='title', read_only=True)
 
     class Meta:
         model = Course
-        fields = ('id', 'title', 'description', 'middle_star', 'price', 'category')
+        fields = ('id', 'title', 'description', 'middle_star',
+                  'price', 'category')
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
@@ -47,6 +49,14 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'message', 'course', 'user')
 
 
+class CommentCreateSerializer(serializers.ModelSerializer):
+    """Media details"""
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'message', 'course')
+
+
 class LessonSerializer(serializers.ModelSerializer):
     """Lesson details"""
 
@@ -59,6 +69,12 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = ('id', 'star', 'course', 'user')
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Favorite
+        fields = ('id', 'course')
 
 
 # Serializers with reprezentations
@@ -88,12 +104,12 @@ class CourseSerializer(TopicsAndRatingMixin, serializers.ModelSerializer):
 
     category = serializers.SlugRelatedField(slug_field='title', read_only=True)
     middle_star = serializers.FloatField(read_only=True)
+    favorite_passed = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Course
         fields = ('id', 'title', 'description', 'price',
-                  'middle_star', 'category')
-
+                  'middle_star', 'favorite_passed', 'category')
 
 
 class CompanySerializer(ContactsMediasMixin, serializers.ModelSerializer):
@@ -104,4 +120,3 @@ class CompanySerializer(ContactsMediasMixin, serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = ('id', 'title', 'description')
-
