@@ -11,6 +11,6 @@ class CoursePagination(PageNumberPagination):
 
     def get_paginated_response(self, data):
         return Response({
-            'count': self.page.paginator.num_pages,
+            'pages_count': self.page.paginator.num_pages,
             'results': data
         })
