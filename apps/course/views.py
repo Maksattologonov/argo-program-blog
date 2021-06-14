@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.functions import Coalesce
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -34,9 +35,7 @@ class CourseDetails(APIView):
     '''Api for all details for course with lessons, ratings and comments'''
     def get(self, request, *args, **kwargs):
         course = Course.objects.filter(id=kwargs.get('pk'))
-        course = course.annotate(middle_star=models.Sum(
-            'rating__star'
-        )/models.Count('rating'))
+        course = course.annotate(middle_star=Coalesce(models.Sum('rating__star')/models.Count('rating'), 5.0))
         serializer = CourseSerializer(course[0], many=False)
         try:
             is_favorite = Favorite.objects.filter(
@@ -49,11 +48,6 @@ class CourseDetails(APIView):
             'data': serializer.data,
             'is_favorite': is_favorite
         })
-
-
-class Categories(generics.ListAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategoryListSerializer
 
 
 class AllCourses(generics.ListAPIView):
@@ -77,7 +71,7 @@ class CategoryCourses(generics.ListAPIView):
     pagination_class = CoursePagination
 
     def get_queryset(self):
-        courses = Course.objects.filter(category=self.kwargs['pk'])
+        courses = Course.objects.filter(category=self.kwargs['pk']).annotate(middle_star=Coalesce(models.Sum('rating__star')/models.Count('rating'), 5.0))
         return courses
 
 
