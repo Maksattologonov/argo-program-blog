@@ -103,6 +103,9 @@ class FavoriteAdd(generics.CreateAPIView):
     model = Favorite
     permission_classes = (IsAuthenticated,)
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 class FavoriteDelete(generics.DestroyAPIView):
     queryset = Favorite.objects.all()
