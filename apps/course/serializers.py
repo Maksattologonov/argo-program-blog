@@ -17,14 +17,6 @@ class CoursesSerializer(serializers.ModelSerializer):
                   'price', 'category')
 
 
-class CategoryListSerializer(serializers.ModelSerializer):
-    """Categories List"""
-
-    class Meta:
-        model = Category
-        fields = ('id', 'title')
-
-
 class MediaSerializer(serializers.ModelSerializer):
     """Media details"""
 
@@ -69,6 +61,12 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = ('id', 'star', 'course', 'user')
+
+
+class RatingCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = ('id', 'star', 'course')
 
 
 class FavoriteSerializer(serializers.ModelSerializer):

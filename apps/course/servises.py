@@ -12,8 +12,11 @@ class CoursesMixin:
         representation = super().to_representation(instance)
         representation['courses'] = self.serializer(
             instance.courses.all().annotate(
-                middle_star=Coalesce(models.Sum('rating__star')/models.Count('rating'), 5.0), many=True
-            )
+                middle_star=Coalesce(
+                    models.Sum('rating__star')/models.Count('rating'), 
+                    5.0
+                )
+            ), many=True
         ).data
         return representation
 

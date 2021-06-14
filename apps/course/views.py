@@ -8,8 +8,8 @@ from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import (CategorySerializer, CommentSerializer,
                           CourseSerializer, CompanySerializer,
-                          CategoryListSerializer, CoursesSerializer, RatingSerializer,
-                          FavoriteSerializer, CommentCreateSerializer)
+                          CoursesSerializer, FavoriteSerializer, 
+                          CommentCreateSerializer, RatingCreateSerializer)
 from .models import Category, Comment, Course, Company, Favorite, Rating
 from .servises import CreateMixin
 from .permissinos import IsOwner
@@ -80,9 +80,12 @@ class RatingCreate(CreateMixin, generics.CreateAPIView):
     Api for create rating.
     Have a mixin thet cheking if rating for course from user exists
     '''
-    serializer_class = RatingSerializer
+    serializer_class = RatingCreateSerializer
     model = Rating
     permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class CommentCreate(generics.CreateAPIView):
