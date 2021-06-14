@@ -1,6 +1,7 @@
 from django.db import models
 from rest_framework import status
 from rest_framework.response import Response
+from django.db.models.functions import Coalesce
 
 
 # Serializer mixins
@@ -11,10 +12,8 @@ class CoursesMixin:
         representation = super().to_representation(instance)
         representation['courses'] = self.serializer(
             instance.courses.all().annotate(
-                middle_star=models.Sum(
-                    'rating__star'
-                )/models.Count('rating')
-            ), many=True
+                middle_star=Coalesce(models.Sum('rating__star')/models.Count('rating'), 5.0), many=True
+            )
         ).data
         return representation
 
