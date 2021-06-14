@@ -9,6 +9,7 @@ from .servises import (CoursesMixin, LessonsMixin,
 class CoursesSerializer(serializers.ModelSerializer):
     """Courses list"""
     middle_star = serializers.FloatField(read_only=True)
+    category = serializers.SlugRelatedField(slug_field='title', read_only=True)
 
     class Meta:
         model = Course

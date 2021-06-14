@@ -13,7 +13,7 @@ from .models import Category, Comment, Course, Company, Favorite, Rating
 from .servises import CreateMixin
 from .permissinos import IsOwner
 from .pagination import CoursePagination
-from .filters import CoursePriceFilter
+from .filters import CourseFilter, CoursePriceFilter
 
 
 class CompanyDetails(APIView):
@@ -38,10 +38,13 @@ class CourseDetails(APIView):
             'rating__star'
         )/models.Count('rating'))
         serializer = CourseSerializer(course[0], many=False)
-        is_favorite = Favorite.objects.filter(
-            course=kwargs.get('pk'),
-            user=request.user
-        ).exists()
+        try:
+            is_favorite = Favorite.objects.filter(
+                course=kwargs.get('pk'),
+                user=request.user
+            ).exists()
+        except:
+            is_favorite = False
         return Response(data={
             'data': serializer.data,
             'is_favorite': is_favorite
@@ -58,13 +61,19 @@ class AllCourses(generics.ListAPIView):
     queryset = Course.objects.all()
     serializer_class = CoursesSerializer
     filter_backends = (SearchFilter, DjangoFilterBackend, )
-    filterset_class = CoursePriceFilter
+    filterset_class = CourseFilter
+    search_fields = ['title',]
+    pagination_class = CoursePagination
     
 
 
 class CategoryCourses(generics.ListAPIView):
     '''Api for one category with its courses'''
     serializer_class = CoursesSerializer
+    pagination_class = CoursePagination
+    filter_backends = (SearchFilter, DjangoFilterBackend, )
+    filterset_class = CoursePriceFilter
+    search_fields = ['title',]
     pagination_class = CoursePagination
 
     def get_queryset(self):
