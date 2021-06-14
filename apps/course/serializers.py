@@ -65,7 +65,7 @@ class RatingSerializer(serializers.ModelSerializer):
 class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorite
-        fields = ('id', 'course', 'user')
+        fields = ('id', 'course')
 
 
 # Serializers with reprezentations
