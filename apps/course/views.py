@@ -1,17 +1,19 @@
 from django.db import models
 from rest_framework import generics
 from rest_framework.views import APIView
-from drf_multiple_model.views import ObjectMultipleModelAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import (CategorySerializer, CommentSerializer,
                           CourseSerializer, CompanySerializer,
                           CategoryListSerializer, CoursesSerializer, RatingSerializer,
-                          FavoriteSerializer)
+                          FavoriteSerializer, CommentCreateSerializer)
 from .models import Category, Comment, Course, Company, Favorite, Rating
 from .servises import CreateMixin
 from .permissinos import IsOwner
 from .pagination import CoursePagination
+from .filters import CoursePriceFilter
 
 
 class CompanyDetails(APIView):
@@ -38,7 +40,7 @@ class CourseDetails(APIView):
         serializer = CourseSerializer(course[0], many=False)
         is_favorite = Favorite.objects.filter(
             course=kwargs.get('pk'),
-            user=request.user #TODO: CHANGE ON REQUEST USER
+            user=request.user
         ).exists()
         return Response(data={
             'data': serializer.data,
@@ -46,14 +48,17 @@ class CourseDetails(APIView):
         })
 
 
-class AllCourses(ObjectMultipleModelAPIView):
+class Categories(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryListSerializer
+
+
+class AllCourses(generics.ListAPIView):
     '''Api for page with all categories and courses'''
-    querylist = [
-        {'queryset': Category.objects.all(),
-         'serializer_class': CategoryListSerializer},
-        {'queryset': Course.objects.all(),
-         'serializer_class': CoursesSerializer,},
-    ]
+    queryset = Course.objects.all()
+    serializer_class = CoursesSerializer
+    filter_backends = (SearchFilter, DjangoFilterBackend, )
+    filterset_class = CoursePriceFilter
     
 
 
@@ -79,8 +84,11 @@ class RatingCreate(CreateMixin, generics.CreateAPIView):
 
 class CommentCreate(generics.CreateAPIView):
     '''Api for create comment'''
-    serializer_class = CommentSerializer
+    serializer_class = CommentCreateSerializer
     permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class CommentUpdate(generics.UpdateAPIView):
@@ -114,6 +122,9 @@ class FavoriteDelete(generics.DestroyAPIView):
 
 
 class FavoritesList(generics.ListAPIView):
-    queryset = Favorite.objects.filter(user=1) #TODO: CHANGE ON REQUEST USER
     serializer_class = FavoriteSerializer
     permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        favorites = Favorite.objects.filter(user=self.request.user) 
+        return favorites
