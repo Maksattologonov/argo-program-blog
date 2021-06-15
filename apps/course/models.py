@@ -99,8 +99,8 @@ class CourseTeacher(models.Model):
 
 
 class CourseImage(models.Model):
-    image = models.ImageField(upload_to='course', verbose_name='Картинка',
-                              null=True)
+    image = models.URLField(verbose_name='Картинка',
+                            )
     course = models.ForeignKey(Course, on_delete=models.CASCADE,
                                related_name='images', verbose_name='Курс')
 
@@ -154,7 +154,7 @@ class Rating(models.Model):
                                       verbose_name='Время создания')
     course = models.ForeignKey(Course, on_delete=models.CASCADE,
                                related_name='rating', verbose_name='Курс')
-    star = models.IntegerField(choices=RATING_RANGE,)
+    star = models.IntegerField(choices=RATING_RANGE, )
     user = models.ForeignKey(User, verbose_name='Пользователь',
                              related_name='rating',
                              on_delete=models.CASCADE)
