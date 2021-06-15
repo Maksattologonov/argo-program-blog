@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = config('SECRET_KEY')
-SECRET_KEY="django-insecure-ni8z*5h*3txtin*mx5=ehgtk6q2h5_z0=fvp2pc)(gk-z-fzs@"
+SECRET_KEY = "django-insecure-ni8z*5h*3txtin*mx5=ehgtk6q2h5_z0=fvp2pc)(gk-z-fzs@"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -40,19 +40,19 @@ CORS_ORIGIN_ALLOW_ALL = True  # If this is used then `CORS_ORIGIN_WHITELIST` wil
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
+    'http://localhost:8001',
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'knox.auth.TokenAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
 }
 
 MIDDLEWARE = [
@@ -91,27 +91,27 @@ WSGI_APPLICATION = 'programming_blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dd2m8r9pqsflol',
-        'USER': 'guncvegwnoouex',
-        'PASSWORD': "faa4eae028f21ce889da0131fe9474b80862b2a8b286511abb87834b0616174a",
-        'HOST': 'ec2-3-89-0-52.compute-1.amazonaws.com',
-        'PORT': '5432'
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': config('DB_NAME'),
-#         'USER': config('DB_USER'),
-#         'PASSWORD': config('DB_PASSWORD'),
-#         'HOST': config('DB_HOST'),
+#         'NAME': 'dd2m8r9pqsflol',
+#         'USER': 'guncvegwnoouex',
+#         'PASSWORD': "faa4eae028f21ce889da0131fe9474b80862b2a8b286511abb87834b0616174a",
+#         'HOST': 'ec2-3-89-0-52.compute-1.amazonaws.com',
 #         'PORT': '5432'
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': '5432'
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -139,7 +139,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # AUTH_USER_MODEL = 'accounts.User'

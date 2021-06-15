@@ -52,7 +52,12 @@ class CourseDetails(APIView):
 
 class AllCourses(generics.ListAPIView):
     '''Api for page with all categories and courses'''
-    queryset = Course.objects.all()
+    queryset = Course.objects.all().annotate(
+        middle_star=Coalesce(
+            models.Sum('rating__star')/models.Count('rating'),
+            5.0
+        )
+    )
     serializer_class = CoursesSerializer
     filter_backends = (SearchFilter, DjangoFilterBackend, )
     filterset_class = CourseFilter
